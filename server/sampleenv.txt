@@ -1,0 +1,5 @@
+PORT=5000
+MONGOURL='mongodb://localhost:27017/stecom'
+clientID='690209119477-fk2a210t30t6c96p0ug.apps.googleusentent.com'
+
+(filename->.env)
