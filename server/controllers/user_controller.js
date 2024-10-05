@@ -10,11 +10,12 @@ const clientId=process.env.clientId;
 const client = new OAuth2Client(
     clientId
 );
-const JWT_SECRET = "prasanna";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const googleAuthController = async (req, res) => {
     const {credential,client_id} = req.body;
-
+    console.log(credential,client_id);
+    
     try{
         const ticket = await client.verifyIdToken({
             idToken: credential,
