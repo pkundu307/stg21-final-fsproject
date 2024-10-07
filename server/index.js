@@ -3,6 +3,7 @@ import userRoute from "./routes/user_route.js"
 import connectDB from './db/db.js';
 import dotenv from "dotenv"
 import cors from "cors"
+import productRouter from "./routes/product_route.js"
 
 
 dotenv.config();
@@ -14,7 +15,7 @@ app.use(cors({
   methods:'GET,POST,PUT,DELETE',
   credentials: true,
 }));
-
+app.use('/api/products',productRouter)
 app.use('/google-auth',async (req, res) => {
   const {credential,client_id} = req.body;
   console.log(credential,client_id);
