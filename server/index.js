@@ -15,7 +15,7 @@ app.use(cors({
   methods:'GET,POST,PUT,DELETE',
   credentials: true,
 }));
-app.use('/api/products',productRouter)
+app.use('/api/v1/products',productRouter)
 app.use('/google-auth',async (req, res) => {
   const {credential,client_id} = req.body;
   console.log(credential,client_id);
