@@ -8,5 +8,7 @@ export interface Product{
     seller_id: string,
     brand: string,
     thumbnail: string,
-    category: string
+    category: string,
+    purchasePrice:number,
+    price:number,
 }
