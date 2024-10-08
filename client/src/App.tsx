@@ -1,14 +1,20 @@
 
 import './App.css'
-import Navbar from './components/Navbar'
-import ProductList from './components/ProductList'
 
+import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
+import Home from './pages/Home'
+import ProductDetails from './components/ProductDetails'
 function App() {
  
   return (
   <>
-<Navbar/>
-<ProductList/>
+  <Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/product/:id" element={<ProductDetails />} />
+    </Routes>
+  </Router>
+
   </>
   )
 }
