@@ -4,7 +4,7 @@ import connectDB from './db/db.js';
 import dotenv from "dotenv"
 import cors from "cors"
 import productRouter from "./routes/product_route.js"
-
+import cartRouter from "./routes/cart_route.js"
 
 dotenv.config();
 
@@ -16,6 +16,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use('/api/v1/products',productRouter)
+app.use('/api/v1/cart',cartRouter)
 app.use('/google-auth',async (req, res) => {
   const {credential,client_id} = req.body;
   console.log(credential,client_id);
