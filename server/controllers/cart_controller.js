@@ -4,6 +4,8 @@ export const addToCart = async (req, res) => {
   try {
     const { id } = req.user;
     const { product } = req.body;
+    console.log(req.body);
+    
 
     const existingCartItem = await Cart.findOne({ user: id, product });
     if (existingCartItem) {

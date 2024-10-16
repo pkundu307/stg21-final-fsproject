@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
+import { useDispatch } from "react-redux";
+import { addItemToCart } from "../redux/cartSlice";
 
 interface Dimensions {
   length: number;
@@ -34,6 +36,7 @@ interface Product {
 }
 
 const ProductDetail: React.FC = () => {
+  const dispatch = useDispatch();
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -79,7 +82,34 @@ const ProductDetail: React.FC = () => {
   if (!product) {
     return <div>Product not found</div>;
   }
+const addProductToCart = (ProductToAdd: Product)=>{
+  const dataToAdd = {
+    quantity:1,
+    product:ProductToAdd._id
+  }
+fetch('http://localhost:5000/api/v1/cart/add',{
+  method: 'POST',
+  headers: {
+    "content-type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
 
+  },
+  body: JSON.stringify(dataToAdd),
+})
+.then((response)=>{
+  if(!response.ok){
+    throw new Error(`Failed to add product inside cart`);
+  }
+  return response.json();
+})
+.then((data)=>{
+  console.log('data added');
+  dispatch(addItemToCart(data));
+}).catch((error)=>{
+console.error('Failed to add product',error);
+})
+
+}
   return (
     <>
     <Navbar/>
@@ -225,7 +255,7 @@ const ProductDetail: React.FC = () => {
               <button
                 type="button"
                 className="min-w-[200px] px-4 py-2.5 border border-blue-600 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded"
-                onClick={() => {}}
+                onClick={() => {addProductToCart(product)}}
               >
                 Add to cart
               </button>
@@ -280,9 +310,9 @@ const ProductDetail: React.FC = () => {
 };
 
 export default ProductDetail;
-//1st. create a cart entity
-//2nd. add to cart controller,update the cart controller,delete from cart controller , empty the cart controller
-//3rd. set routes for cart
+//1st. create a cart entity ->done
+//2nd. add to cart controller,update the cart controller,delete from cart controller , empty the cart controller ->done
+//3rd. set routes for cart ->done
 //4th. create cart slice in client side (using redux)
 //5th. integrate cart slice with add to cart button
 //6th.then create a cart page
