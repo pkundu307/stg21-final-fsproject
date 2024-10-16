@@ -5,7 +5,7 @@ import { authenticate } from "../middleware/authenticate.js";
 
 const router = express.Router();
 
-router.post('/add',addToCart)
+router.post('/add',authenticate,addToCart)
 
 router.get('/cart',authenticate,fetchCartByUser)//middleware needed
  router.delete('/delete/:productid',authenticate,deleteCartItem)// middleware needed
