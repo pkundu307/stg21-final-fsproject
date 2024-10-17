@@ -6,8 +6,9 @@ import adminDashboard from "../../src/images/admindashboard.jpg";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
 import searchIcon from "../../src/images/search.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { setUser } from "../redux/userSlice";
 
 interface GoogleOAuthResponse {
   credential: string;
@@ -20,6 +21,18 @@ interface Product {
 }
 
 function Navbar() {
+  const dispatch = useDispatch();
+  const localStorageUser = localStorage.getItem("user");
+  const userFromLocalStorage = localStorageUser
+    ? JSON.parse(localStorageUser)
+    : null;
+ const a=useSelector((state: RootState) => state.user) || userFromLocalStorage;
+
+  const user =
+    useSelector((state: RootState) => state.user.user) || userFromLocalStorage;
+
+    console.log(user, "<-\\\\---");
+  
   const data = useSelector((state:RootState)=>state.cart.items.length)
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
@@ -157,6 +170,7 @@ function Navbar() {
       // Store user information and JWT token separately
       localStorage.setItem("user", JSON.stringify(user)); // Store the user object (including picture) as a string
       localStorage.setItem("token", token); // Store the JWT token
+      dispatch(setUser(user))
       setName(user.name);
 
       // Dispatch the user data to Redux store
@@ -174,6 +188,7 @@ function Navbar() {
   const handleGoogleLoginFailure = (error: Error) => {
     console.error("Login Failed:", error);
   };
+console.log(user.name,'------=====');
 
   return (
     <>
@@ -268,7 +283,7 @@ function Navbar() {
 
               {/* Large Screen Icons */}
               <div className="hidden md:flex items-center space-x-4">
-                {name!="" ? <p>Welcome, {name}</p> : <p>Please log in</p>}
+                {user ? <p>Welcome, {user.name}</p> : <p>Please log in</p>}
                 <Link to="/adminpanel">
                   <img
                     src={adminDashboard}
@@ -282,25 +297,25 @@ function Navbar() {
                     className="text-white flex items-center cursor-pointer"
                     onClick={toggleDropdown}
                   >
-                    {/* {user ? (
+                    {user ? (
                       <img
                         src={user.picture}
                         alt="Profile"
                         className="rounded-full h-8 w-8"
                       />
-                    ) : ( */}
+                    ) : (
                       <img
                         src={profile}
                         alt="Profile"
                         className="rounded-full h-8 w-8"
                       />
-                    {/* )} */}
+                     )} 
                   </div>
 
                   {/* Dropdown Menu */}
                   {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2">
-                      {name!="" ? null : (
+                      {!user ? null : (
                         <a
                           href="#"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
@@ -328,7 +343,7 @@ function Navbar() {
                       >
                         Settings
                       </a>
-                       {name!="" && ( 
+                       {user && ( 
                         <a
                           href="#"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
