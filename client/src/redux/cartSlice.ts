@@ -3,10 +3,12 @@ import axios from 'axios';
 import { RootState } from './types'; // Assuming you have this set up
 
 interface CartItem {
+  _id: string;
   id: string;
   image: string;
   quantity: number;
   product: {
+    _id: string;
     id: string;
     title: string;
     price: number;
@@ -32,7 +34,7 @@ export const fetchCart = createAsyncThunk<CartItem[], void, { state: RootState }
   async (_, { getState, rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/cart/cart', {
+      const response = await axios.get('http://localhost:5000/api/v1/cart/cart', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -52,7 +54,7 @@ export const updateCart = createAsyncThunk<CartItem, { productId: string; quanti
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:5000/api/cart/cart/${productId}`,
+        `http://localhost:5000/api/v1/cart/${productId}`,
         { quantity },
         {
           headers: {

@@ -1,15 +1,16 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
-import profile from "../../src/images/profile.jpg"
-import cart from "../../src/images/cart.jpg";
-import adminDashboard from "../../src/images/admindashboard.jpg";
+import profile from "../images/profile.jpg";
+import cart from "../images/cart.jpg";
+import adminDashboard from "../images/admindashboard.jpg";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
-import searchIcon from "../../src/images/search.png";
+import searchIcon from "../images/search.png";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { setUser } from "../redux/userSlice";
-
+import { RootState } from "../redux/types";
+import { ToastContainer, toast } from "react-toastify"; // Import react-toastify
+import "react-toastify/dist/ReactToastify.css";
+import { clearUser, setUser } from "../redux/userSlice";
 interface GoogleOAuthResponse {
   credential: string;
   clientId: string;
@@ -21,19 +22,6 @@ interface Product {
 }
 
 function Navbar() {
-  const dispatch = useDispatch();
-  const localStorageUser = localStorage.getItem("user");
-  const userFromLocalStorage = localStorageUser
-    ? JSON.parse(localStorageUser)
-    : null;
- const a=useSelector((state: RootState) => state.user) || userFromLocalStorage;
-
-  const user =
-    useSelector((state: RootState) => state.user.user) || userFromLocalStorage;
-
-    console.log(user, "<-\\\\---");
-  
-  const data = useSelector((state:RootState)=>state.cart.items.length)
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState<string>("");
   const [results, setResults] = useState<Product[]>([]);
@@ -80,9 +68,12 @@ function Navbar() {
     setSearchTerm(e.target.value);
   };
 
+  const data: number = useSelector(
+    (state: RootState) => state.cart.items.length
+  );
+  console.log("data--->", data);
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [name,setName] = useState("");
   const [loginPopupOpen, setLoginPopupOpen] = useState(false);
   const [isLoginView, setIsLoginView] = useState(true); // New state for toggling between login and sign-up
   const [email, setEmail] = useState<string>("");
@@ -107,48 +98,49 @@ function Navbar() {
   const closeLoginPopup = () => {
     setLoginPopupOpen(false);
   };
-  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (!email || !password || (!isLoginView && password !== confirmPassword)) {
-  //     return alert("Please fill in all required fields correctly.");
-  //   }
+  const dispatch = useDispatch();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email || !password || (!isLoginView && password !== confirmPassword)) {
+      return alert("Please fill in all required fields correctly.");
+    }
 
-  //   try {
-  //     let response;
-  //     if (isLoginView) {
-  //       // Login logic
-  //       response = await axios.post<{ token: string }>(
-  //         "http://localhost:5000/api/auth/login",
-  //         {
-  //           email,
-  //           password,
-  //         }
-  //       );
-  //     } else {
-  //       // Sign-up logic
-  //       response = await axios.post<{ token: string }>(
-  //         "http://localhost:5000/api/auth/signup",
-  //         {
-  //           email,
-  //           password,
-  //           name: email, // Assuming name is the same as email for simplicity
-  //         }
-  //       );
-  //     }
+    try {
+      let response;
+      if (isLoginView) {
+        // Login logic
+        response = await axios.post<{ token: string }>(
+          "http://localhost:5000/api/auth/login",
+          {
+            email,
+            password,
+          }
+        );
+      } else {
+        // Sign-up logic
+        response = await axios.post<{ token: string }>(
+          "http://localhost:5000/api/auth/signup",
+          {
+            email,
+            password,
+            name: email, // Assuming name is the same as email for simplicity
+          }
+        );
+      }
 
-  //     // Store JWT token in localStorage
-  //     const token = response.data.token;
-  //     localStorage.setItem("token", token);
+      // Store JWT token in localStorage
+      const token = response.data.token;
+      localStorage.setItem("token", token);
 
-  //     closeLoginPopup(); // Close popup after successful login/signup
-  //   } catch (error) {
-  //     console.error("Authentication error:", error);
-  //     alert(
-  //       (error as any).response?.data?.error ||
-  //         "An error occurred during authentication."
-  //     );
-  //   }
-  // };
+      closeLoginPopup(); // Close popup after successful login/signup
+    } catch (error) {
+      console.error("Authentication error:", error);
+      alert(
+        (error as any).response?.data?.error ||
+          "An error occurred during authentication."
+      );
+    }
+  };
 
   const handleGoogleLoginSuccess = async (
     credentialResponse: GoogleOAuthResponse
@@ -166,15 +158,13 @@ function Navbar() {
       // Extract the user and token from the response
       const { user, token } = response.data;
       console.log(user);
- 
+      toast.success("Login success");
       // Store user information and JWT token separately
       localStorage.setItem("user", JSON.stringify(user)); // Store the user object (including picture) as a string
       localStorage.setItem("token", token); // Store the JWT token
-      dispatch(setUser(user))
-      setName(user.name);
 
       // Dispatch the user data to Redux store
-    
+      dispatch(setUser(user));
       setLoginPopupOpen(false);
       setDropdownOpen(false);
       console.log("Login Success:", response.data);
@@ -183,12 +173,26 @@ function Navbar() {
     }
   };
 
+  const localStorageUser = localStorage.getItem("user");
+  const userFromLocalStorage = localStorageUser
+    ? JSON.parse(localStorageUser)
+    : null;
 
+  const user =
+    useSelector((state: RootState) => state.user.user) || userFromLocalStorage;
+  console.log(user, "<----");
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    dispatch(clearUser());
+    setLoginPopupOpen(false);
+    setDropdownOpen(false);
+  };
 
   const handleGoogleLoginFailure = (error: Error) => {
     console.error("Login Failed:", error);
   };
-console.log(user.name,'------=====');
 
   return (
     <>
@@ -198,7 +202,7 @@ console.log(user.name,'------=====');
           className="w-full container mx-auto flex items-center justify-between bg-slate-300 p-1 "
           style={{ zIndex: 1, position: "sticky", top: 0 }}
         >
-        
+          <ToastContainer />
           <div className="container mx-auto flex justify-between items-center">
             {/* Left Section: Logo and Search Bar */}
             <div className="flex items-center space-x-4">
@@ -309,13 +313,13 @@ console.log(user.name,'------=====');
                         alt="Profile"
                         className="rounded-full h-8 w-8"
                       />
-                     )} 
+                    )}
                   </div>
 
                   {/* Dropdown Menu */}
                   {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2">
-                      {!user ? null : (
+                      {user ? null : (
                         <a
                           href="#"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
@@ -323,39 +327,35 @@ console.log(user.name,'------=====');
                         >
                           Login
                         </a>
-                       )} 
+                      )}
                       <a
                         onClick={() => setDropdownOpen(false)}
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                       >
                         <Link to="/profile">Profile</Link>
                       </a>
-                      {/* {user == null ? null : ( */}
+                      {user == null ? null : (
                         <Link to="/orders">
                           <a className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                             My Orders
                           </a>
                         </Link>
-                      {/* )} */}
+                      )}
                       <a
                         href="#"
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                       >
                         Settings
                       </a>
-                       {user && ( 
+                      {user && (
                         <a
                           href="#"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          onClick={()=>{localStorage.clear()
-                            setLoginPopupOpen(false)
-                            setDropdownOpen(false)
-                            setName("")
-                          }}
+                          onClick={handleLogout}
                         >
                           Logout
                         </a>
-                       )} 
+                      )}
                     </div>
                   )}
                 </div>
@@ -373,7 +373,7 @@ console.log(user.name,'------=====');
                     <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
                       {data}
                     </span>
-                  )} 
+                  )}
                 </div>
               </div>
             </div>
@@ -442,25 +442,25 @@ console.log(user.name,'------=====');
                 {/* Profile Icon */}
                 <div className="relative text-white flex items-center cursor-pointer">
                   <div onClick={toggleDropdown}>
-                    {/* {user ? ( */}
-                      {/* <img
+                    {user ? (
+                      <img
                         src={user.picture}
                         alt="Profile"
                         className="rounded-full h-8 w-8"
                       />
-                    ) : ( */}
+                    ) : (
                       <img
                         src={profile}
                         alt="Profile"
                         className="rounded-full h-8 w-8"
                       />
-                    {/* )} */}
+                    )}
                   </div>
 
                   {/* Dropdown Menu */}
                   {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2">
-                      {/* {user ? null : ( */}
+                      {user ? null : (
                         <a
                           href="#"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
@@ -468,21 +468,21 @@ console.log(user.name,'------=====');
                         >
                           Login
                         </a>
-                      {/* )} */}
-                      {/* {user == null ? null : ( */}
+                      )}
+                      {user == null ? null : (
                         <Link to="/profile">
                           <a className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                             Profile
                           </a>
                         </Link>
-                      {/* )} */}
-                      {/* {user == null ? null : ( */}
+                      )}
+                      {user == null ? null : (
                         <Link to="/orders">
                           <a className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                             My Orders
                           </a>
                         </Link>
-                      {/* )} */}
+                      )}
                       <a
                         href="#"
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
@@ -490,15 +490,15 @@ console.log(user.name,'------=====');
                         Settings
                       </a>
 
-                      {/* {user == null ? null : ( */}
+                      {user == null ? null : (
                         <a
                           href="#"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                          // onClick={handleLogout}
+                          onClick={handleLogout}
                         >
                           Logout
                         </a>
-                      {/* )} */}
+                      )}
                       <a href="#" onClick={() => setDropdownOpen(false)}>
                         <center>❌</center>
                       </a>
@@ -519,7 +519,7 @@ console.log(user.name,'------=====');
                     <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1 py-0.5 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
                       {data}
                     </span>
-                  )} 
+                  )}
                 </div>
               </div>
             </div>
@@ -532,9 +532,7 @@ console.log(user.name,'------=====');
                 <h2 className="text-xl font-semibold mb-4">
                   {isLoginView ? "Login" : "Sign Up"}
                 </h2>
-                <form 
-                // onSubmit={handleSubmit}
-                >
+                <form onSubmit={handleSubmit}>
                   <div className="mb-4">
                     <label htmlFor="email" className="block text-gray-600">
                       Email:
