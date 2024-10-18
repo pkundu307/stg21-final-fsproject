@@ -18,6 +18,46 @@ const CartComponent = () => {
     }
   }, [dispatch, cartStatus]);
 
+const handleQuantityChange=async(productId:string,cartId:string,currentQuantity:number,type:'increment'|'decrement')=>{
+console.log(productId,cartId,currentQuantity);
+
+const newQuantity=type==="increment"?currentQuantity+1:currentQuantity-1;
+
+if(newQuantity<1){
+  return;
+}
+dispatch(updateCart({productId,quantity:newQuantity}))
+
+}
+
+const handleDeleteProduct = async(productId:string,cartId:string)=>{
+  const token = localStorage.getItem('token');
+  
+  if(!token){
+    return alert("Please login to remove product");
+  }
+
+  try{
+    const response = await axios.delete(`http://localhost:5000/api/v1/cart/delete/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    dispatch(removeItemFromCart(cartId));
+
+  
+  location.reload();
+
+  console.log('Product deleted successfully');
+  }catch(error){
+    console.log(error);
+    
+  }
+  
+  
+}
 
   return (
     <>
@@ -51,7 +91,7 @@ const CartComponent = () => {
                     <button
                       type="button"
                       className="flex items-center justify-center w-5 h-5 bg-gray-400 outline-none rounded-full"
-                      // onClick={() => handleQuantityChange(item.product._id, item._id, item.quantity, 'decrement')}
+                      onClick={() => handleQuantityChange(item.product._id, item._id, item.quantity, 'decrement')}
                     >
                       <span style={{ color: 'white' }}>-</span>
                     </button>
@@ -59,7 +99,7 @@ const CartComponent = () => {
                     <button
                       type="button"
                       className="flex items-center justify-center w-5 h-5 bg-gray-400 outline-none rounded-full"
-                      // onClick={() => handleQuantityChange(item.product._id, item._id, item.quantity, 'increment')}
+                      onClick={() => handleQuantityChange(item.product._id, item._id, item.quantity, 'increment')}
                     >
                       <span style={{ color: 'white' }}>+</span>
                     </button>
@@ -73,7 +113,7 @@ const CartComponent = () => {
                     <path d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z" />
                   </svg>
                   <button
-                  //  onClick={() => handleDeleteProduct(item.product._id, item._id)}
+                   onClick={() => handleDeleteProduct(item.product._id, item._id)}
                    >
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 cursor-pointer fill-gray-400 inline-block" viewBox="0 0 24 24">
                       <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" />
