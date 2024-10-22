@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import ProductDetails from './components/ProductDetails'
 import Cart from './components/Cart'
 import store from './redux/store'
+import Profile from './components/Profile'
 function App() {
  
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path='/cart' element={<Cart/>}/>
+      <Route path='/profile' element={<Profile/>} />
     </Routes>
   </Router>
 

@@ -7,7 +7,7 @@ const token = localStorage.getItem('token');
 export const fetchUserDetails = createAsyncThunk(
   'user/fetchUserDetails',
   async () => {
-    const response = await axios.get('http://localhost:5000/api/auth/profile', {
+    const response = await axios.get('http://localhost:5000/auth/profile', {
       headers: {
         Authorization: `Bearer ${token}`
       }
