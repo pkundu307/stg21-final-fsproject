@@ -8,8 +8,8 @@ import Address from '../models/address_entity.js';
 
 
 const instance = new Razorpay({
-  key_id: 'rzp',
-  key_secret: 'Og05Q',
+  key_id: 'rzp_test_izwrHraJQ0vHKp',
+  key_secret: 'Og05QZlM8fwxbNrsiF1kcc6o',
 })
 // Create a new order
 export const createOrder = async (req, res) => {
@@ -19,9 +19,9 @@ export const createOrder = async (req, res) => {
     const user = await User.findById(id);
     const address = await Address.findById(selectedAddress)
     const finalAddress = address.street+","+address.city+','+address.state+","+address.postalCode+","+address.country;
+    console.log(items,'<---', paymentMethod, selectedAddress, id);
     let totalAmount = 0;
     let shippingFee=0;
-    console.log(items, totalAmount, paymentMethod, selectedAddress, id);
 
     for (let item of items) {
       const productId = item.productId;
@@ -35,7 +35,7 @@ export const createOrder = async (req, res) => {
       }
 
       // Multiply the price of the product by its quantity and add to totalAmount
-      totalAmount += 3 * quantity;
+      totalAmount += product.price * quantity;
     }
 
 

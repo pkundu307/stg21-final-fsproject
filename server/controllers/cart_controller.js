@@ -62,33 +62,37 @@ export const deleteFromCart = async (req, res) => {
 };
 
 // Update the cart item (e.g., quantity)
-export const updateCart = async (req, res) => {
-  const { id } = req.user;
-  const { productid } = req.params;
-  const { quantity } = req.body;
-  console.log(id,quantity,productid);
+// export const updateCart = async (req, res) => {
+//   const { id } = req.user;
+//   const { productid } = req.params;
+//   const { quantity } = req.body;
+//   console.log(id,quantity,productid);
   
 
-  try {
-    const updatedCart = await Cart.findOneAndUpdate(
-      { user: id, product: productid },
-      { $set: { quantity } },
-      { new: true }
-    ).populate('product');
+//   try {
+//     const updatedCart = await Cart.findOneAndUpdate(
+//       { user: id, product: productid },
+//       { $set: { quantity } },
+//       { new: true }
+//     ).populate('product');
 
-    if (!updatedCart) {
-      return res.status(404).json({ message: 'Cart item not found' });
-    }
-    console.log(updatedCart);
+//     if (!updatedCart) {
+//       return res.status(404).json({ message: 'Cart item not found' });
+//     }
+//     console.log(updatedCart);
     
-    res.status(200).json({ message: 'Cart item updated', updatedCart });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating cart item', error: err.message });
-  }
-};
+//     res.status(200).json({ message: 'Cart item updated', updatedCart });
+//   } catch (err) {
+//     res.status(500).json({ message: 'Error uccccpdating cart item', error: err.message });
+//   }
+// };
 
 export const clearCart = async (req, res) => {
+  console.log('okokok');
+  
   const { id } = req.user; 
+  console.log(id,'<----');
+  
 
   try {
     
