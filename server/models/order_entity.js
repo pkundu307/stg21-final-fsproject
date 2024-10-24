@@ -44,7 +44,6 @@ const orderSchema = new Schema(
     trackingNumber: { type: String },
     estimatedDeliveryDate: { type: Date },
     cancellationReason: { type: String }
-
   },
 
   { timestamps: true }

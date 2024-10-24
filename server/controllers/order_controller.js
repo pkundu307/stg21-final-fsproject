@@ -4,6 +4,7 @@ import Order from '../models/order_entity.js';
 import Product from '../models/product_entity.js';
 import User from '../models/user_entity.js';
 import Cart from '../models/cart_entity.js';
+import Address from '../models/address_entity.js';
 
 
 const instance = new Razorpay({
@@ -18,7 +19,7 @@ export const createOrder = async (req, res) => {
     const user = await User.findById(id);
     const address = await Address.findById(selectedAddress)
     const finalAddress = address.street+","+address.city+','+address.state+","+address.postalCode+","+address.country;
-    // console.log(items, totalAmount, paymentMethod, selectedAddress, id);
+    console.log(items,'<---', paymentMethod, selectedAddress, id);
     let totalAmount = 0;
     let shippingFee=0;
 

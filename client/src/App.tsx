@@ -7,6 +7,8 @@ import ProductDetails from './components/ProductDetails'
 import Cart from './components/Cart'
 import store from './redux/store'
 import Profile from './components/Profile'
+import Order from './components/Order'
+import OrderSuccess from './components/OrderSuccess'
 function App() {
  
   return (
@@ -19,6 +21,8 @@ function App() {
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path='/cart' element={<Cart/>}/>
       <Route path='/profile' element={<Profile/>} />
+      <Route path='/order' element={<Order/>} />
+      <Route path='/order-success' element={<OrderSuccess/>}/>
     </Routes>
   </Router>
 
