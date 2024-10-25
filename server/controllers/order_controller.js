@@ -246,7 +246,8 @@ export const cancelOrder = async (req, res) => {
   const { orderId } = req.params;
   const { cancellationReason } = req.body;
   const userId = req.user.id; 
-
+  console.log(cancellationReason,userId);
+  
   try {
     // Find the order by orderId
     const order = await Order.findById(orderId);
