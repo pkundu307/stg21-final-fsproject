@@ -2,7 +2,9 @@ import express from 'express';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
-import Issue from '../db/issue_schema';
+import Issue from '../models/issue_entity.js';
+import connectDB from '../db/db.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 
 const app = express();
@@ -10,36 +12,12 @@ const PORT = 3000;
 
 app.use(bodyParser.json());
 
-const mongoURL = 'mongodb://localhost:27017/issuesDB';
 
+connectDB();// connecting with database
 
-const connectDB = async () => {
-  try {
-      const connection = await mongoose.connect(mongoURL)
-      console.log("DB connection established");
-  } catch (error) {
-      console.error("Mongoose connection error");
-      process.exit(1);
-  }
-}
-connectDB();
+//post api that take two functions
 
-
-function authenticateJWT(req, res, next) {
-  const token = req.headers.authorization?.split(" ")[1];
-
-  if (!token) return res.status(403).send("Access denied");
-
-  jwt.verify(token, 'SECRET_KEY', (err, user) => {
-    if (err) return res.status(403).send("Invalid token");
-
-    req.user = user;  
-    next();
-  });
-}
-
-
-app.post('/create-issue', authenticateJWT, async (req, res) => {
+app.post('/create-issue', authenticate, async (req, res) => {
   try {
     const { email } = req.user; 
     const { phone, issue } = req.body;
