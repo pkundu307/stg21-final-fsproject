@@ -7,7 +7,9 @@ import {   createOrder,
     createOnlineOrder,
     verifyOrder,
     updateAddress,
-    cancelOrder } from "../controllers/order_controller.js";
+    cancelOrder, 
+    getAllOrders,
+    changeOrderStatus} from "../controllers/order_controller.js";
 import { authenticate } from "../middleware/authenticate.js";
 
 import express from "express";
@@ -23,5 +25,11 @@ router.post('/onlinepay',authenticate,createOnlineOrder)
 router.post('/paymentverification',verifyOrder)
 router.put('/updateAddress/:orderId', authenticate, updateAddress);
 router.put('/cancel/:orderId', authenticate, cancelOrder);
+
+// -----------ADMIN USE----------------
+router.get('/admin', getAllOrders);
+
+// Route to change order status
+router.put('/update/:orderId', changeOrderStatus);
 
 export default router;
