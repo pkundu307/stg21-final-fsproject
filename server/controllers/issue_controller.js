@@ -26,6 +26,30 @@ export const createIssue = async (req, res) => {
 };
 
 
+export const updateIssue = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const issue = Issue.findById(id);
+
+    if(!issue){
+      res.status(401).json({message:"Issue Not Found!"});
+    }
+
+    
+
+    issue.is_resolved=true;
+
+    await issue.save();
+
+    res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred while updating the product" });
+  }
+};
+
+
 export const getAllIssues = async (req, res) => {
   try {
     const issues = await Issue.find();
