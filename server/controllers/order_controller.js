@@ -322,3 +322,39 @@ export const updateAddress = async (req, res) => {
     res.status(500).json({ message: "Internal server error. Please try again later." });
   }
 };
+// ----------------------ADMIN USE-----------------------
+
+export const getAllOrders = async (req, res) => {
+  try {
+      const orders = await Order.find().populate('user').populate('items.productId');
+      return res.status(200).json(orders);
+  } catch (error) {
+      return res.status(500).json({ message: 'Error fetching orders', error });
+  }
+};
+
+
+export const changeOrderStatus = async (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+
+  try {
+      const order = await Order.findById(orderId);
+      if (!order) {
+          return res.status(404).json({ message: 'Order not found' });
+      }
+
+      // Validate status
+      const validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+      if (!validStatuses.includes(status)) {
+          return res.status(400).json({ message: 'Invalid status' });
+      }
+
+      order.status = status;
+      await order.save();
+
+      return res.status(200).json(order);
+  } catch (error) {
+      return res.status(500).json({ message: 'Error changing order status', error });
+  }
+};

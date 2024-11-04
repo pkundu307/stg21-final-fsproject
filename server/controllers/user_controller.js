@@ -5,8 +5,8 @@ import dotenv from "dotenv"
 import User from "../models/user_entity.js"
 dotenv.config()
 
-const client = new OAuth2Client(process.env.ClintID);
-const JWT_SECRET = 'prasanna';
+
+const client = new OAuth2Client(process.env.clientID);
 
 export const googleAuthController = async (req, res) => {
     
