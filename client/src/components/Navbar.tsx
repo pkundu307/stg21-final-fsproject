@@ -34,6 +34,9 @@ function Navbar() {
       setResults([]);
     }
   }, [debouncedSearchTerm]);
+  console.log('====================================');
+  console.log(import.meta.env.VITE_CLIENT_ID);
+  console.log('====================================');
   // Debounce effect
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -193,10 +196,10 @@ function Navbar() {
   const handleGoogleLoginFailure = (error: Error) => {
     console.error("Login Failed:", error);
   };
-
+const clientId=import.meta.env.VITE_CLIENT_ID
   return (
     <>
-      <GoogleOAuthProvider clientId="53358939467-tgdtgg3be3b4gm8qk04kc7pglt7vicq7.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={clientId}>
         {/* <div className="max-w-screen-lg container mx-auto flex items-center justify-between bg-slate-400 p-5"> */}
         <nav
           className="w-full container mx-auto flex items-center justify-between bg-slate-300 p-1 "

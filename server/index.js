@@ -7,6 +7,7 @@ import productRouter from "./routes/product_route.js"
 import cartRouter from "./routes/cart_route.js"
 import addressRouter from "./routes/address_route.js"
 import orderRouter from "./routes/order_route.js"
+import issueRouter from './routes/issue_route.js';
 
 dotenv.config();
 
@@ -25,7 +26,7 @@ app.use('/api/v1/cart',cartRouter)
 app.use('/auth',userRoute);
 app.use('/api/v1/address',addressRouter)
 app.use("/api/v1/orders", orderRouter)
-
+app.use("/api/v1/issues",issueRouter)
 
 connectDB();
 const Port = process.env.PORT
