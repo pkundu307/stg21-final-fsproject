@@ -194,9 +194,11 @@ function Navbar() {
     console.error("Login Failed:", error);
   };
 
+const clientId=import.meta.env.VITE_CLIENT_ID
+
   return (
     <>
-      <GoogleOAuthProvider clientId="939883123761-up76q4mal36sd3quh558ssccr1cqc035.apps.googleusercontent.com">
+      <GoogleOAuthProvider clientId={clientId}>
         {/* <div className="max-w-screen-lg container mx-auto flex items-center justify-between bg-slate-400 p-5"> */}
         <nav
           className="w-full container mx-auto flex items-center justify-between bg-slate-300 p-1 "
