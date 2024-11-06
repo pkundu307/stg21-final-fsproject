@@ -196,7 +196,9 @@ function Navbar() {
   const handleGoogleLoginFailure = (error: Error) => {
     console.error("Login Failed:", error);
   };
+
 const clientId=import.meta.env.VITE_CLIENT_ID
+
   return (
     <>
       <GoogleOAuthProvider clientId={clientId}>
