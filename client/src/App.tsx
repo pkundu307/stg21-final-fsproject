@@ -12,6 +12,7 @@ import OrderSuccess from './components/OrderSuccess'
 import MyOrders from './components/MyOrders'
 import DashboardCards from './components/AdminPanel'
 import OrderList from './components/OrderListAdmin'
+import AddProduct from './components/AddProduct'
 function App() {
  
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path='/orders' element={<MyOrders/>}/>
       <Route path='/adminpanel' element={<DashboardCards/>}/>
       <Route path='/adminorder' element={<OrderList/>}/>
+      <Route path='/addproduct' element={<AddProduct/>}/>
     </Routes>
   </Router>
 

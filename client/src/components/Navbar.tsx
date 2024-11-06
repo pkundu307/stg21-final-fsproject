@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
-import profile from "../images/profile.jpg";
+import profile from "../images/profile.jpg"
 import cart from "../images/cart.jpg";
 import adminDashboard from "../images/admindashboard.jpg";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
@@ -34,9 +34,6 @@ function Navbar() {
       setResults([]);
     }
   }, [debouncedSearchTerm]);
-  console.log('====================================');
-  console.log(import.meta.env.VITE_CLIENT_ID);
-  console.log('====================================');
   // Debounce effect
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -54,7 +51,7 @@ function Navbar() {
       if (debouncedSearchTerm) {
         try {
           const response = await axios.get<Product[]>(
-            `http://localhost:5000/api/product/search?name=${debouncedSearchTerm}`
+            `http://localhost:5000/api/v1/products/search/product?name=${debouncedSearchTerm}`
           );
           setResults(response.data);
         } catch (error) {
@@ -151,7 +148,7 @@ function Navbar() {
     const { credential, clientId } = credentialResponse;
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/google_auth",
+        "http://localhost:5000/api/auth/google-auth",
         {
           credential,
           client_id: clientId,
@@ -196,10 +193,10 @@ function Navbar() {
   const handleGoogleLoginFailure = (error: Error) => {
     console.error("Login Failed:", error);
   };
-const clientId=import.meta.env.VITE_CLIENT_ID
+
   return (
     <>
-      <GoogleOAuthProvider clientId={clientId}>
+      <GoogleOAuthProvider clientId="939883123761-up76q4mal36sd3quh558ssccr1cqc035.apps.googleusercontent.com">
         {/* <div className="max-w-screen-lg container mx-auto flex items-center justify-between bg-slate-400 p-5"> */}
         <nav
           className="w-full container mx-auto flex items-center justify-between bg-slate-300 p-1 "
@@ -241,7 +238,8 @@ const clientId=import.meta.env.VITE_CLIENT_ID
                       <ul className="flex flex-col divide-y divide-gray-200">
                         {results.map((product) => (
                           <Link
-                            to={`product/${product.id}`}
+                      to={`/product/${product.id}`}
+                      
                             onClick={() => setResults([])}
                           >
                             <li

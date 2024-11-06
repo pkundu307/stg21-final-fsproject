@@ -30,7 +30,7 @@ const DashboardCards: React.FC = () => {
                     Manage your product listings and stock levels here.
                 </p>
                 <button className="mt-auto bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">
-                    View Products
+                  <Link to='/addproduct'>  View Products</Link>
                 </button>
             </div>
 

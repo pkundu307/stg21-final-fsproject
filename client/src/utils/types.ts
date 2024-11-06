@@ -1,5 +1,6 @@
 export interface Product{
     _id: number,
+    id:number,
     title: string,
     mrp: number,
     discountPercent: number,
