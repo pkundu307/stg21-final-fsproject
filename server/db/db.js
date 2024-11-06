@@ -6,10 +6,7 @@ const mongoURL = process.env.MONGOURL; // Use MONGODB_URI as defined in your .en
 
 const connectDB = async () => {
     try {
-        const connection = await mongoose.connect(mongoURL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const connection = await mongoose.connect(mongoURL);
         console.log("DB connection established successfully");
     } catch (error) {
         console.error("Mongoose connection error:", error.message); // Log the error message

@@ -23,7 +23,7 @@ const DashboardCards: React.FC = () => {
                 </button>
             </div>
 
-            {/* Card for Products */}
+            {/* Card for Issues*/}
             <div className="bg-white shadow-lg rounded-lg p-6 m-4 flex flex-col justify-between w-full md:w-1/2 lg:w-1/3">
                 <h2 className="text-xl font-bold mb-4">Products</h2>
                 <p className="text-gray-700 mb-4">
