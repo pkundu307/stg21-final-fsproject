@@ -1,6 +1,9 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import Navbar from './Navbar';
+import { AxiosError } from 'axios';
+import { isRejectedWithValue } from '@reduxjs/toolkit';
+
+
 
 const AddProduct = () => {
     const {
@@ -10,7 +13,7 @@ const AddProduct = () => {
         reset
     } = useForm();
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data :undefined) => {
         try {
             const response = await fetch('http://localhost:5000/api/product/add', {
                 method: 'POST',
@@ -28,8 +31,11 @@ const AddProduct = () => {
                 alert(`Error: ${errorData.message}`);
             }
         } catch (error) {
-            alert(`Network error: ${error.message}`);
-        }
+            if (error instanceof AxiosError && error.response) {
+              return isRejectedWithValue(error.response.data as string);
+            }
+            return isRejectedWithValue('Error fetching addresses');
+          }
     };
 
     return (
@@ -46,7 +52,7 @@ const AddProduct = () => {
                     {...register('title', { required: 'Title is required' })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+                {errors.title && <p className="text-red-500"></p>}
             </div>
 
             {/* Description */}
@@ -66,7 +72,7 @@ const AddProduct = () => {
                     {...register('price', { required: 'Price is required', min: 1 })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.price && <p className="text-red-500">{errors.price.message}</p>}
+                {errors.price && <p className="text-red-500">{"error price"}</p>}
             </div>
 
             {/* MRP */}
@@ -77,7 +83,7 @@ const AddProduct = () => {
                     {...register('mrp', { required: 'MRP is required', min: 1 })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.mrp && <p className="text-red-500">{errors.mrp.message}</p>}
+                {errors.mrp && <p className="text-red-500">{"errors.mrp"}</p>}
             </div>
 
             {/* Stock */}
@@ -88,7 +94,7 @@ const AddProduct = () => {
                     {...register('stock', { required: 'Stock is required', min: 0 })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.stock && <p className="text-red-500">{errors.stock.message}</p>}
+                {errors.stock && <p className="text-red-500">{"errors.stock"}</p>}
             </div>
 
             {/* Brand */}

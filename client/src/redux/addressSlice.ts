@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios ,{AxiosError }from 'axios';
 
 // Get JWT token from localStorage
 const token = localStorage.getItem('token');
@@ -37,8 +37,11 @@ export const fetchAddresses = createAsyncThunk<Address[], void, { rejectValue: s
       });
       
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue(error.response.data as string);
+      }
+      return rejectWithValue('Error fetching addresses');
     }
   }
 );
@@ -54,8 +57,11 @@ export const updateAddress = createAsyncThunk<Address, { addressId: string; upda
         },
       });
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue(error.response.data as string);
+      }
+      return rejectWithValue('Error fetching addresses');
     }
   }
 );
@@ -71,8 +77,11 @@ export const deleteAddress = createAsyncThunk<string, string, { rejectValue: str
         },
       });
       return addressId;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue(error.response.data as string);
+      }
+      return rejectWithValue('Error fetching addresses');
     }
   }
 );
@@ -88,8 +97,11 @@ export const addAddress = createAsyncThunk<Address, Address, { rejectValue: stri
         },
       });
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response) {
+        return rejectWithValue(error.response.data as string);
+      }
+      return rejectWithValue('Error fetching addresses');
     }
   }
 );

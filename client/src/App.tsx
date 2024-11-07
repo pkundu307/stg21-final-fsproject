@@ -1,6 +1,6 @@
 
 import './App.css'
-import { Provider,useDispatch,useSelector } from 'react-redux'
+import { Provider } from 'react-redux'
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
 import Home from './pages/Home'
 import ProductDetails from './components/ProductDetails'
@@ -9,11 +9,11 @@ import store from './redux/store'
 import Profile from './components/Profile'
 import Order from './components/Order'
 import OrderSuccess from './components/OrderSuccess'
-import MyOrders from './components/MyOrders'
 import DashboardCards from './components/AdminPanel'
 import OrderList from './components/OrderListAdmin'
 import IssueList from './components/IssueList'; 
 import About from './components/AboutUs'
+import MyOrders from './components/Myorders'
 function App() {
  
   return (
