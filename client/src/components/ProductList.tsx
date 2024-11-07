@@ -23,6 +23,8 @@ function ProductList() {
     };
     fetchedProducts();
   }, []);
+  console.log(products,'<---');
+  
   return (
     <div>
       {
@@ -34,13 +36,13 @@ function ProductList() {
 
             <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
               {products.map((product) => (
-                <div key={product._id} className="group relative">
+                <div key={product.id} className="group relative">
                   <div className="relative m-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
                     <a
                       className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
                       href="#"
                     >
-                      <Link to={`product/${product._id}`}>
+                      <Link to={`product/${product.id}`}>
                         <img
                           className="object-cover"
                           src={product.thumbnail}

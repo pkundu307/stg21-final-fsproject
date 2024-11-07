@@ -26,26 +26,29 @@ export const createIssue = async (req, res) => {
 };
 
 
+
+
 export const updateIssue = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const issue = Issue.findById(id);
+    // Await the findById result to ensure it completes before proceeding
+    const issue = await Issue.findById(id);
 
-    if(!issue){
-      res.status(401).json({message:"Issue Not Found!"});
+    if (!issue) {
+      return res.status(404).json({ message: "Issue Not Found!" });
     }
 
-    
+    // Update the issue status
+    issue.is_resolved = true;
 
-    issue.is_resolved=true;
+    // Save the updated issue
+    const updatedIssue = await issue.save();
 
-    await issue.save();
-
-    res.status(200).json({ message: "Product updated successfully", product: updatedProduct });
+    res.status(200).json({ message: "Issue updated successfully", issue: updatedIssue });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred while updating the product" });
+    res.status(500).json({ message: "An error occurred while updating the issue" });
   }
 };
 
