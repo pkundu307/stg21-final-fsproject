@@ -13,6 +13,7 @@ import MyOrders from './components/MyOrders'
 import DashboardCards from './components/AdminPanel'
 import OrderList from './components/OrderListAdmin'
 import IssueList from './components/IssueList'; 
+import About from './components/AboutUs'
 function App() {
  
   return (
@@ -32,7 +33,8 @@ function App() {
       <Route path='/adminorder' element={<OrderList/>}/>
       <Route path='/customerissues' element={<IssueList/>} />
 
-      
+      <Route path='/about' element={<About/>} />
+
 
 
     </Routes>

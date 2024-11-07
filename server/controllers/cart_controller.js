@@ -26,6 +26,7 @@ export const addToCart = async (req, res) => {
 //fetch the product from the cart by userid
 export const fetchCartByUser = async (req, res) => {
   const { id } = req.user;
+console.log(id);
 
   try {
     const cartItems = await Cart.find({ user: id })
@@ -35,6 +36,7 @@ export const fetchCartByUser = async (req, res) => {
     if (!cartItems || cartItems.length === 0) {
       return res.status(404).json({ message: 'No items found in the cart' });
     }
+console.log('>---',cartItems);
 
     res.status(200).json(cartItems);
   } catch (err) {

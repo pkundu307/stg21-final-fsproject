@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   const handleSubscribe = () => {
@@ -30,7 +31,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative bg-gray-600 text-black py-8">
+    <footer className="relative bg-gray-400 text-black py-8">
       {/* SVG Wave Shape */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
         <svg
@@ -71,7 +72,7 @@ const Footer: React.FC = () => {
         <div className="bg-green-400 p-4 rounded-lg">
           <h3 className="font-semibold text-lg mb-4">Useful Links</h3>
           <ul className="space-y-2">
-            <li><a href="#about" className="hover:underline text-white">About Us</a></li>
+            <li><a href="#about" className="hover:underline text-white"><Link to='/about'>About Us</Link></a></li>
             <li><a href="#privacy" className="hover:underline text-white">Privacy Policy</a></li>
             <li><a href="#refund" className="hover:underline text-white">Cancellation & Refund</a></li>
             <li><a href="#issue" className="hover:underline text-white">Raise an Issue</a></li>
@@ -79,20 +80,20 @@ const Footer: React.FC = () => {
           </ul>
         </div>
 
-        <div className="bg-purple-400 p-4 rounded-lg">
+        <div className="bg-purple-400 p-9 rounded-lg">
           <h3 className="font-semibold text-lg mb-4">Follow Us</h3>
-          <div className="flex space-x-4">
+          <div className="flex space-x-5">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-              <FaFacebook className="text-2xl hover:text-blue-400 transition duration-200" />
+              <FaFacebook className="text-4xl hover:text-blue-400 transition duration-200 mt-5" />
             </a>
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <FaTwitter className="text-2xl hover:text-blue-400 transition duration-200" />
+              <FaTwitter className="text-3xl hover:text-blue-400 transition duration-200 mt-3" />
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-              <FaInstagram className="text-2xl hover:text-pink-500 transition duration-200" />
+              <FaInstagram className="text-2xl hover:text-pink-500 transition duration-200 mt-1" />
             </a>
             <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-              <FaGithub className="text-2xl hover:text-gray-500 transition duration-200" />
+              <FaGithub className="text-xl hover:text-gray-500 transition duration-200" />
             </a>
           </div>
         </div>

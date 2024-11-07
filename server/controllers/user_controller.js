@@ -11,7 +11,9 @@ const client = new OAuth2Client(process.env.clientID);
 export const googleAuthController = async (req, res) => {
     
   const { credential, client_id } = req.body;
-
+console.log('====================================');
+console.log(credential,client_id);
+console.log('====================================');
   
   try {
     const ticket = await client.verifyIdToken({

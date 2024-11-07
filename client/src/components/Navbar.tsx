@@ -148,7 +148,7 @@ function Navbar() {
     const { credential, clientId } = credentialResponse;
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/google-auth",
+        "http://localhost:5000/auth/google_auth",
         {
           credential,
           client_id: clientId,
@@ -292,12 +292,12 @@ const clientId=import.meta.env.VITE_CLIENT_ID
               <div className="hidden md:flex items-center space-x-4">
                 {user ? <p>Welcome, {user.name}</p> : <p>Please log in</p>}
                 <Link to="/adminpanel">
-                  <img
+               {user?.role==="admin" &&  <img
                     src={adminDashboard}
                     alt="admin"
                     className="rounded-full h-10 w-13"
                   />
-                </Link>
+               } </Link>
                 {/* Profile Icon */}
                 <div className="relative">
                   <div
