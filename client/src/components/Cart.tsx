@@ -4,9 +4,11 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { fetchCart, removeItemFromCart, selectCartItems, selectCartStatus, updateCart } from "../redux/cartSlice";
 import Navbar from "./Navbar";
+import { AppDispatch } from "../redux/store";
 
 const CartComponent = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   const cartItems = useSelector(selectCartItems);
   console.log(cartItems);
 
@@ -17,6 +19,7 @@ const CartComponent = () => {
       dispatch(fetchCart());
     }
   }, [dispatch, cartStatus]);
+  
 
 const handleQuantityChange=async(productId:string,cartId:string,currentQuantity:number,type:'increment'|'decrement')=>{
 console.log(productId,cartId,currentQuantity);
@@ -47,7 +50,9 @@ const handleDeleteProduct = async(productId:string,cartId:string)=>{
     )
     dispatch(removeItemFromCart(cartId));
 
-  
+  console.log('====================================');
+  console.log(response.data);
+  console.log('====================================');
   location.reload();
 
   console.log('Product deleted successfully');

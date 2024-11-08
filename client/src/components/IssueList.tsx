@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 interface IssueItem {
   _id: string;
   email: string;
@@ -17,12 +19,12 @@ const IssueList: React.FC = () => {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await axios.get<IssueItem[]>(
+        const response = await axios.get<{ issues: IssueItem[] }>(
           "http://localhost:5000/api/v1/issues/all"
         );
         setIssues(response.data.issues);
       } catch (err) {
-        setError("Failed to fetch issues.");
+        setError(`Failed to fetch issues.${err}`);
       }
     };
 
@@ -34,17 +36,17 @@ const IssueList: React.FC = () => {
       await axios.put(`http://localhost:5000/api/v1/issues/update/${_id}`, {
         is_resolved: newStatus,
       });
-      toast("Issue resolved successfully");
+      toast.success("Issue status updated successfully!");
       setIssues((prevIssues) =>
         prevIssues.map((issue) =>
           issue._id === _id ? { ...issue, is_resolved: newStatus } : issue
         )
       );
     } catch (err) {
-      setError("Failed to update issue status.");
+      setError(`Failed to update issue status.",${err}`);
+      toast.error("Failed to update issue status.");
     }
   };
-
   return (
     <>
       <Navbar />

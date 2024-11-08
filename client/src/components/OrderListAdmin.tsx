@@ -21,7 +21,7 @@ const OrderList: React.FC = () => {
                 const response = await axios.get('http://localhost:5000/api/v1/orders/admin'); // Adjust API endpoint
                 setOrders(response.data);
             } catch (err) {
-                setError('Failed to fetch orders.');
+                setError(`Failed to fetch orders.${err}`);
             } finally {
                 setLoading(false);
             }
@@ -38,10 +38,14 @@ const OrderList: React.FC = () => {
                     order.id === orderId ? { ...order, status: newStatus } : order
                 )
             );
-        } catch (err) {
-            setError('Failed to update order status.');
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+              return (error.response.data as string);
+            }
+            return ('Error fetching addresses');
+          }
         }
-    };
+      
 
     if (loading) return <div className="text-center">Loading...</div>;
     if (error) return <div className="text-red-500">{error}</div>;

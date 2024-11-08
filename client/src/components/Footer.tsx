@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Footer: React.FC = () => {
+  const [email,setEmail] = useState("")
   const handleSubscribe = () => {
-    const email = (document.getElementById("email") as HTMLInputElement).value;
-    const token = localStorage.getItem("jwtToken");
+    console.log(email);
+    
 
-    fetch("http://localhost:3000/subscribe", {
+    fetch("http://localhost:5000/api/v1/newsletter/subscribe", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, 
-      },
+        "Content-Type": "application/json"},
       body: JSON.stringify({ email }),
     })
       .then((response) => {
@@ -21,9 +23,11 @@ const Footer: React.FC = () => {
         }
         return response.json();
       })
-      .then((data) => {
-        alert("Subscribed successfully!");
+      .then(() => {
+        toast("SUBSCRIBED TO NEWSLETTER");
+        setEmail("")
       })
+     
       .catch((error) => {
         console.error("Error:", error);
         alert("Failed to subscribe. Please try again later.");
@@ -32,6 +36,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="relative bg-gray-400 text-black py-8">
+           <ToastContainer />
       {/* SVG Wave Shape */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
         <svg
@@ -58,6 +63,8 @@ const Footer: React.FC = () => {
               id="email"
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e)=>{setEmail(e.target.value)}}
               className="w-full p-2 rounded-l-lg border-2 border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             <button
@@ -75,7 +82,7 @@ const Footer: React.FC = () => {
             <li><a href="#about" className="hover:underline text-white"><Link to='/about'>About Us</Link></a></li>
             <li><a href="#privacy" className="hover:underline text-white">Privacy Policy</a></li>
             <li><a href="#refund" className="hover:underline text-white">Cancellation & Refund</a></li>
-            <li><a href="#issue" className="hover:underline text-white">Raise an Issue</a></li>
+            <li><Link to="/addissue" className="hover:underline text-white">Raise an Issue</Link></li>
             <li><a href="#career" className="hover:underline text-white">Career</a></li>
           </ul>
         </div>

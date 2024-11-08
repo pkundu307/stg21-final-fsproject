@@ -31,7 +31,7 @@ const initialState: CartState = {
 // Fetch cart items by user ID (from JWT)
 export const fetchCart = createAsyncThunk<CartItem[], void, { state: RootState }>(
   'cart/fetchCart',
-  async (_, { getState, rejectWithValue }) => {
+  async (_, {  rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get('http://localhost:5000/api/v1/cart/cart', {
@@ -42,8 +42,11 @@ export const fetchCart = createAsyncThunk<CartItem[], void, { state: RootState }
 console.log(response.data);
 
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch cart');
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data as string);
+      }
+      return rejectWithValue('Error fetching addresses');
     }
   }
 );
@@ -67,12 +70,14 @@ export const updateCart = createAsyncThunk<CartItem, { productId: string; quanti
       // Extract the updated cart item
       const updatedItem = response.data.updatedCart;
       return updatedItem;  // Return updated item
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to update cart');
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data as string);
+      }
+      return rejectWithValue('Error fetching addresses');
     }
   }
 );
-
 
 
 const cartSlice = createSlice({

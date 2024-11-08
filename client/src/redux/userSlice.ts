@@ -1,7 +1,16 @@
 // userSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+
 const token = localStorage.getItem('token');
+
+// Type definition for the user object
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  picture: string;
+}
 
 // Thunk to fetch user details
 export const fetchUserDetails = createAsyncThunk(
@@ -9,8 +18,8 @@ export const fetchUserDetails = createAsyncThunk(
   async () => {
     const response = await axios.get('http://localhost:5000/auth/profile', {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   }
@@ -19,11 +28,11 @@ export const fetchUserDetails = createAsyncThunk(
 // Thunk to update user details
 export const updateUserDetails = createAsyncThunk(
   'user/updateUserDetails',
-  async (updatedUser: any, { getState }) => {
+  async (updatedUser: User) => {
     const response = await axios.put('http://localhost:5000/api/auth/update', updatedUser, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   }
@@ -42,14 +51,14 @@ const initialState: UserState = {
   name: '',
   email: '',
   picture: '',
-  status: 'idle'
+  status: 'idle',
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<any>) => {
+    setUser: (state, action: PayloadAction<User>) => {
       state.id = action.payload.id;
       state.name = action.payload.name;
       state.email = action.payload.email;
@@ -60,7 +69,7 @@ const userSlice = createSlice({
       state.name = '';
       state.email = '';
       state.picture = '';
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,7 +93,7 @@ const userSlice = createSlice({
         state.email = email;
         state.picture = picture;
       });
-  }
+  },
 });
 
 export const { setUser, clearUser } = userSlice.actions;

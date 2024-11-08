@@ -2,8 +2,25 @@ import { useForm } from 'react-hook-form';
 import Navbar from './Navbar';
 import { AxiosError } from 'axios';
 import { isRejectedWithValue } from '@reduxjs/toolkit';
+import ProductList from './ProductList';
 
-
+// Define the structure of your form data
+interface ProductFormData {
+  title: string;
+  description: string;
+  price: number;
+  mrp: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  weight: number;
+  dimensions: {
+    length: number;
+    width: number;
+    height: number;
+  };
+}
 
 const AddProduct = () => {
     const {
@@ -11,9 +28,9 @@ const AddProduct = () => {
         handleSubmit,
         formState: { errors },
         reset
-    } = useForm();
+    } = useForm<ProductFormData>();
 
-    const onSubmit = async (data :undefined) => {
+    const onSubmit = async (data: ProductFormData) => {
         try {
             const response = await fetch('http://localhost:5000/api/product/add', {
                 method: 'POST',
@@ -41,7 +58,11 @@ const AddProduct = () => {
     return (
         <>
         <Navbar/>
+        <ProductList heading= "All product" />
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg mx-auto p-4 space-y-4">
+        <h2 className="text-xl font-semibold">All Product</h2>
+
+
             <h2 className="text-xl font-semibold">Add New Product</h2>
 
             {/* Title */}
@@ -52,7 +73,7 @@ const AddProduct = () => {
                     {...register('title', { required: 'Title is required' })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.title && <p className="text-red-500"></p>}
+                {errors.title && <p className="text-red-500">{errors.title.message}</p>}
             </div>
 
             {/* Description */}
@@ -72,7 +93,7 @@ const AddProduct = () => {
                     {...register('price', { required: 'Price is required', min: 1 })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.price && <p className="text-red-500">{"error price"}</p>}
+                {errors.price && <p className="text-red-500">{errors.price.message}</p>}
             </div>
 
             {/* MRP */}
@@ -83,7 +104,7 @@ const AddProduct = () => {
                     {...register('mrp', { required: 'MRP is required', min: 1 })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.mrp && <p className="text-red-500">{"errors.mrp"}</p>}
+                {errors.mrp && <p className="text-red-500">{errors.mrp.message}</p>}
             </div>
 
             {/* Stock */}
@@ -94,7 +115,7 @@ const AddProduct = () => {
                     {...register('stock', { required: 'Stock is required', min: 0 })}
                     className="w-full p-2 border rounded"
                 />
-                {errors.stock && <p className="text-red-500">{"errors.stock"}</p>}
+                {errors.stock && <p className="text-red-500">{errors.stock.message}</p>}
             </div>
 
             {/* Brand */}

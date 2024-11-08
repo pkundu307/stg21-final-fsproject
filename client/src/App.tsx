@@ -14,6 +14,8 @@ import OrderList from './components/OrderListAdmin'
 import IssueList from './components/IssueList'; 
 import About from './components/AboutUs'
 import MyOrders from './components/Myorders'
+import Issue from './components/IssueForm'
+import AddProduct from './components/AddProduct'
 function App() {
  
   return (
@@ -32,9 +34,11 @@ function App() {
       <Route path='/adminpanel' element={<DashboardCards/>}/>
       <Route path='/adminorder' element={<OrderList/>}/>
       <Route path='/customerissues' element={<IssueList/>} />
-
+      <Route path='/addproduct' element={<AddProduct/>} />
+    
       <Route path='/about' element={<About/>} />
-
+  <Route path='/addissue' element={<Issue/>} />
+    
 
 
     </Routes>

@@ -1,5 +1,6 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
+import { FormEvent } from 'react';
 import profile from "../images/profile.jpg"
 import cart from "../images/cart.jpg";
 import adminDashboard from "../images/admindashboard.jpg";
@@ -11,10 +12,11 @@ import { RootState } from "../redux/types";
 import { ToastContainer, toast } from "react-toastify"; // Import react-toastify
 import "react-toastify/dist/ReactToastify.css";
 import { clearUser, setUser } from "../redux/userSlice";
-interface GoogleOAuthResponse {
-  credential: string;
-  clientId: string;
-}
+import { CredentialResponse } from "@react-oauth/google";
+// interface GoogleOAuthResponse {
+//   credential: string;
+//   clientId: string;
+// }
 interface Product {
   id: string;
   title: string;
@@ -136,14 +138,14 @@ function Navbar() {
     } catch (error) {
       console.error("Authentication error:", error);
       alert(
-        (error as any).response?.data?.error ||
+     
           "An error occurred during authentication."
       );
     }
   };
 
   const handleGoogleLoginSuccess = async (
-    credentialResponse: GoogleOAuthResponse
+    credentialResponse: CredentialResponse
   ) => {
     const { credential, clientId } = credentialResponse;
     try {
@@ -190,8 +192,8 @@ function Navbar() {
     setDropdownOpen(false);
   };
 
-  const handleGoogleLoginFailure = (error: Error) => {
-    console.error("Login Failed:", error);
+  const handleGoogleLoginFailure = () => {
+    console.error("Login Failed:", );
   };
 
 const clientId=import.meta.env.VITE_CLIENT_ID
