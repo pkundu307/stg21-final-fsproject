@@ -17,7 +17,7 @@ const OrderPage: React.FC = () => {
   const [isOrder, setIsOrder] = useState(false);
   const sliderRef = useRef<HTMLDivElement | null>(null);
 
-  const handleDragEnd = (_event: any, info: any) => {
+  const handleDragEnd = (_event: unknown, info: any) => {
     if (info.point.x >= (sliderRef.current?.offsetWidth || 300) - 60) {
       handlePlaceOrder();
      

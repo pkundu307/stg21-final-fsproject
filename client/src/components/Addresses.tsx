@@ -2,11 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../redux/store';
 import { fetchAddresses, updateAddress, deleteAddress, addAddress } from '../redux/addressSlice';
+interface Address {
+  _id: string;
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+}
 
 const AddressList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { addresses, status, error } = useSelector((state: RootState) => state.address);
+  const { addresses} = useSelector((state: RootState) => state.address);
   const [newAddress, setNewAddress] = useState({
+    _id:'',
     street: '',
     city: '',
     state: '',
@@ -23,6 +32,7 @@ const AddressList: React.FC = () => {
   const handleAddAddress = () => {
     dispatch(addAddress(newAddress));
     setNewAddress({
+      _id:'',
       street: '',
       city: '',
       state: '',
@@ -35,7 +45,6 @@ const AddressList: React.FC = () => {
     if (!editId) return;
 
     const updatedAddress = {
-      _id: addressId,
       ...newAddress,
     };
 
@@ -43,6 +52,7 @@ const AddressList: React.FC = () => {
     setIsEditing(false);
     setEditId(null); // Reset after updating
     setNewAddress({
+      _id:'',
         street: '',
         city: '',
         state: '',
@@ -51,10 +61,13 @@ const AddressList: React.FC = () => {
       });
   };
 
-  const handleEditClick = (address: any) => {
+
+  
+  const handleEditClick = (address: Address) => {
     setIsEditing(true);
     setEditId(address._id);
     setNewAddress({
+      _id: address._id,
       street: address.street,
       city: address.city,
       state: address.state,
@@ -62,7 +75,7 @@ const AddressList: React.FC = () => {
       country: address.country,
     });
   };
-
+  
   const handleDeleteAddress = (addressId: string) => {
     dispatch(deleteAddress(addressId));
   };

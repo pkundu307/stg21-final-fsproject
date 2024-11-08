@@ -28,6 +28,7 @@ interface Product {
   images: string[];
   colors: string[];
   sizes: string[];
+  reviews: string[];
   highlights: string[];
   weight: number;
   dimensions: Dimensions;
@@ -54,6 +55,8 @@ const ProductDetail: React.FC = () => {
         }
         const data: Product = await response.json();
         setProduct(data);
+        console.log(data,'<--->');
+        
         {
           data.images.push(data.thumbnail);
         }
@@ -110,6 +113,9 @@ console.error('Failed to add product',error);
 })
 
 }
+console.log('--------------------------------',product.reviews);
+// pkprasanna307
+// MUmCE2UqVpQD0rAn
   return (
     <>
     <Navbar/>
@@ -257,6 +263,7 @@ console.error('Failed to add product',error);
                 className="min-w-[200px] px-4 py-2.5 border border-blue-600 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded"
                 onClick={() => {addProductToCart(product)}}
               >
+           
                 Add to cart
               </button>
             </div>
@@ -266,41 +273,19 @@ console.error('Failed to add product',error);
         <div className="mt-16 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6">
           <h3 className="text-xl font-bold text-gray-800">
             Product information
+            {product.id}
           </h3>
           <ul className="mt-4 space-y-6 text-gray-800">
             <li className="text-sm">
-              TYPE <span className="ml-4 float-right">LAPTOP</span>
+              Brand <span className="ml-4 float-right">{product.brand}</span>
             </li>
             <li className="text-sm">
-              RAM <span className="ml-4 float-right">16 BG</span>
+              Category <span className="ml-4 float-right">{product.category}</span>
             </li>
             <li className="text-sm">
-              SSD <span className="ml-4 float-right">1000 BG</span>
+              Stock <span className="ml-4 float-right">{product.stock}</span>
             </li>
-            <li className="text-sm">
-              PROCESSOR TYPE{" "}
-              <span className="ml-4 float-right">INTEL CORE I7-12700H</span>
-            </li>
-            <li className="text-sm">
-              PROCESSOR SPEED{" "}
-              <span className="ml-4 float-right">2.3 - 4.7 GHz</span>
-            </li>
-            <li className="text-sm">
-              DISPLAY SIZE INCH <span className="ml-4 float-right">16.0</span>
-            </li>
-            <li className="text-sm">
-              DISPLAY SIZE SM <span className="ml-4 float-right">40.64 cm</span>
-            </li>
-            <li className="text-sm">
-              DISPLAY TYPE{" "}
-              <span className="ml-4 float-right">
-                OLED, TOUCHSCREEN, 120 Hz
-              </span>
-            </li>
-            <li className="text-sm">
-              DISPLAY RESOLUTION{" "}
-              <span className="ml-4 float-right">2880x1620</span>
-            </li>
+    
           </ul>
         </div>
       </div>

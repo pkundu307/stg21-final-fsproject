@@ -45,7 +45,7 @@ function MyOrders() {
   }, []);
 
   console.log(orders);
-  const handlePopUpOpen = async (orderId:any) => {
+  const handlePopUpOpen = async (orderId:string) => {
     console.log(orderId);
 
     setPopup(true);
@@ -62,6 +62,8 @@ function MyOrders() {
             },
         })
         toast.success("Order canceled successfully")
+        console.log(res);
+        
         location.reload();
         setPopup(false)
         setCancelReason("")

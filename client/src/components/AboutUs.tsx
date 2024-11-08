@@ -1,9 +1,11 @@
-import React from "react";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 const About = () => {
-  return (
-    <div className="bg-blue-100 min-h-screen flex flex-col items-center justify-center">
-      <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+  return (<>
+  <Navbar/>
+  <div className="bg-gradient-to-b from-cyan-500 to-white flex flex-col items-center justify-center mb-9">
+  <div className="max-w-4xl mt-2 mx-auto p-8 bg-white rounded-lg ">
         <h1 className="text-4xl font-bold text-center mb-4">About Us</h1>
         <p className="text-lg text-gray-700 mb-6">
           Welcome to lootlo , your go-to destination for quality products and
@@ -29,8 +31,12 @@ const About = () => {
           <li>Customer Satisfaction</li>
         </ul>
         <h2 className="text-2xl font-semibold mb-2">Contact Us</h2>
+        <h4 className="text-2xl text-gray-600 mb-2">+92 3427403209742</h4>
+
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -1,6 +1,26 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import Navbar from './Navbar';
+import { AxiosError } from 'axios';
+import { isRejectedWithValue } from '@reduxjs/toolkit';
+import ProductList from './ProductList';
+
+// Define the structure of your form data
+interface ProductFormData {
+  title: string;
+  description: string;
+  price: number;
+  mrp: number;
+  stock: number;
+  brand: string;
+  category: string;
+  thumbnail: string;
+  weight: number;
+  dimensions: {
+    length: number;
+    width: number;
+    height: number;
+  };
+}
 
 const AddProduct = () => {
     const {
@@ -8,9 +28,9 @@ const AddProduct = () => {
         handleSubmit,
         formState: { errors },
         reset
-    } = useForm();
+    } = useForm<ProductFormData>();
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: ProductFormData) => {
         try {
             const response = await fetch('http://localhost:5000/api/product/add', {
                 method: 'POST',
@@ -28,14 +48,21 @@ const AddProduct = () => {
                 alert(`Error: ${errorData.message}`);
             }
         } catch (error) {
-            alert(`Network error: ${error.message}`);
-        }
+            if (error instanceof AxiosError && error.response) {
+              return isRejectedWithValue(error.response.data as string);
+            }
+            return isRejectedWithValue('Error fetching addresses');
+          }
     };
 
     return (
         <>
         <Navbar/>
+        <ProductList heading= "All product" />
         <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg mx-auto p-4 space-y-4">
+        <h2 className="text-xl font-semibold">All Product</h2>
+
+
             <h2 className="text-xl font-semibold">Add New Product</h2>
 
             {/* Title */}

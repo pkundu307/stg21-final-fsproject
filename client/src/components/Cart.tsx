@@ -4,9 +4,11 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { fetchCart, removeItemFromCart, selectCartItems, selectCartStatus, updateCart } from "../redux/cartSlice";
 import Navbar from "./Navbar";
+import { AppDispatch } from "../redux/store";
 
 const CartComponent = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   const cartItems = useSelector(selectCartItems);
   console.log(cartItems);
 
@@ -17,6 +19,7 @@ const CartComponent = () => {
       dispatch(fetchCart());
     }
   }, [dispatch, cartStatus]);
+  
 
 const handleQuantityChange=async(productId:string,cartId:string,currentQuantity:number,type:'increment'|'decrement')=>{
 console.log(productId,cartId,currentQuantity);
@@ -47,7 +50,9 @@ const handleDeleteProduct = async(productId:string,cartId:string)=>{
     )
     dispatch(removeItemFromCart(cartId));
 
-  
+  console.log('====================================');
+  console.log(response.data);
+  console.log('====================================');
   location.reload();
 
   console.log('Product deleted successfully');
@@ -73,7 +78,7 @@ const handleDeleteProduct = async(productId:string,cartId:string)=>{
               <div className="flex gap-4">
                 <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0">
                   <img
-                    src={item.product.thumbnail || ""}
+                    src={item?.product?.thumbnail || ""}
                     className="w-full h-full object-contain rounded-lg"
                     alt="Product Thumbnail"
                   />
@@ -81,7 +86,7 @@ const handleDeleteProduct = async(productId:string,cartId:string)=>{
 
                 <div className="flex flex-col gap-4">
                   <div>
-                    <h3 className="text-base font-bold text-gray-800">{item.product.title}</h3>
+                    <h3 className="text-base font-bold text-gray-800">{item?.product?.title||""}</h3>
                     <p className="text-sm font-semibold text-gray-500 mt-2 flex items-center gap-2">
                       Color: <span className="inline-block w-5 h-5 rounded-md bg-[#ac7f48]"></span>
                     </p>
@@ -121,7 +126,7 @@ const handleDeleteProduct = async(productId:string,cartId:string)=>{
                     </svg>
                   </button>
                 </div>
-                <h3 className="text-base font-bold text-gray-800 mt-auto">₹{item.product.price}</h3>
+                <h3 className="text-base font-bold text-gray-800 mt-auto">₹{item?.product?.price||""}</h3>
               </div>
             </div>
           ))}
@@ -132,7 +137,7 @@ const handleDeleteProduct = async(productId:string,cartId:string)=>{
           <h2 className="text-lg font-bold text-gray-800">Order Summary</h2>
           <div className="flex justify-between text-gray-600">
             <span>Total:</span>
-            <span className="font-bold">₹{cartItems.reduce((acc, item) => acc + item.product.price * item.quantity, 0)}</span>
+            <span className="font-bold">₹{cartItems.reduce((acc, item) => acc + item?.product?.price||0 * item.quantity, 0)}</span>
           </div>
           <button
             className="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition-colors"
