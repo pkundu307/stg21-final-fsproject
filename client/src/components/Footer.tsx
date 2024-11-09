@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import Issue from './IssueForm';
 import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
@@ -20,7 +22,7 @@ const Footer: React.FC = () => {
         }
         return response.json();
       })
-      .then((data) => {
+      .then(() => {
         alert("Subscribed successfully!");
       })
       .catch((error) => {
@@ -74,7 +76,7 @@ const Footer: React.FC = () => {
             <li><a href="#about" className="hover:underline text-white">About Us</a></li>
             <li><a href="#privacy" className="hover:underline text-white">Privacy Policy</a></li>
             <li><a href="#refund" className="hover:underline text-white">Cancellation & Refund</a></li>
-            <li><a href="#issue" className="hover:underline text-white">Raise an Issue</a></li>
+            <li><a href="/Issue" className="hover:underline text-white">Raise an Issue</a></li>
             <li><a href="#career" className="hover:underline text-white">Career</a></li>
           </ul>
         </div>
