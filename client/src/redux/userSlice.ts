@@ -17,7 +17,7 @@ interface User {
 export const fetchUserDetails = createAsyncThunk(
   'user/fetchUserDetails',
   async () => {
-    const response = await axios.get('http://localhost:5000/auth/profile', {
+    const response = await axios.get(`${baseUrl}/auth/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

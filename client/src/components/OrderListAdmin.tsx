@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
+import { baseUrl } from '../utils/baseUrl';
 
 interface OrderItem {
     id: string;
@@ -18,7 +19,7 @@ const OrderList: React.FC = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/orders/admin'); // Adjust API endpoint
+                const response = await axios.get(`${baseUrl}/api/v1/orders/admin`); // Adjust API endpoint
                 setOrders(response.data);
             } catch (err) {
                 setError(`Failed to fetch orders.${err}`);
@@ -32,7 +33,7 @@ const OrderList: React.FC = () => {
 
     const handleChangeStatus = async (orderId: string, newStatus: string) => {
         try {
-            await axios.put(`http://localhost:5000/api/v1/orders/update/${orderId}`, { status: newStatus }); // Adjust API endpoint
+            await axios.put(`${baseUrl}/api/v1/orders/update/${orderId}`, { status: newStatus }); // Adjust API endpoint
             setOrders((prevOrders) =>
                 prevOrders.map((order) =>
                     order.id === orderId ? { ...order, status: newStatus } : order

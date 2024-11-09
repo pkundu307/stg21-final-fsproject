@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 import axios from "axios";
 import { RootState,useAppDispatch } from "../redux/store";
 import { PanInfo } from "framer-motion";
+import { baseUrl } from "../utils/baseUrl";
 
 
 interface Address {
@@ -121,7 +122,7 @@ const OrderPage: React.FC = () => {
   
     if (paymentMethod === "cash_on_delivery") {
         // Existing logic for cash on delivery
-        const response = await fetch("http://localhost:5000/api/v1/orders/new", {
+        const response = await fetch(`${baseUrl}/api/v1/orders/new`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -137,7 +138,7 @@ const OrderPage: React.FC = () => {
           });
   
           // Clear the cart after placing the order
-          await axios.put('http://localhost:5000/api/v1/cart/delete', {}, {
+          await axios.put(`${baseUrl}/api/v1/cart/delete`, {}, {
             headers: { Authorization: `Bearer ${token}` },
           });
           dispatch(clearCart());

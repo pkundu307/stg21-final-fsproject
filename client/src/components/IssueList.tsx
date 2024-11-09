@@ -3,6 +3,7 @@ import axios from "axios";
 import Navbar from "./Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { baseUrl } from "../utils/baseUrl";
 
 interface IssueItem {
   _id: string;
@@ -20,7 +21,7 @@ const IssueList: React.FC = () => {
     const fetchIssues = async () => {
       try {
         const response = await axios.get<{ issues: IssueItem[] }>(
-          "http://localhost:5000/api/v1/issues/all"
+          `${baseUrl}/api/v1/issues/all`
         );
         setIssues(response.data.issues);
       } catch (err) {
@@ -33,7 +34,7 @@ const IssueList: React.FC = () => {
 
   const handleChangeStatus = async (_id: string, newStatus: boolean) => {
     try {
-      await axios.put(`http://localhost:5000/api/v1/issues/update/${_id}`, {
+      await axios.put(`${baseUrl}/api/v1/issues/update/${_id}`, {
         is_resolved: newStatus,
       });
       toast.success("Issue status updated successfully!");

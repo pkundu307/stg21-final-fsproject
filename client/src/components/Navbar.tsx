@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify"; // Import react-toastify
 import "react-toastify/dist/ReactToastify.css";
 import { clearUser, setUser } from "../redux/userSlice";
 import { CredentialResponse } from "@react-oauth/google";
+import { baseUrl } from "../utils/baseUrl";
 // interface GoogleOAuthResponse {
 //   credential: string;
 //   clientId: string;
@@ -53,7 +54,7 @@ function Navbar() {
       if (debouncedSearchTerm) {
         try {
           const response = await axios.get<Product[]>(
-            `http://localhost:5000/api/v1/products/search/product?name=${debouncedSearchTerm}`
+            `${baseUrl}/api/v1/products/search/product?name=${debouncedSearchTerm}`
           );
           setResults(response.data);
         } catch (error) {
@@ -112,7 +113,7 @@ function Navbar() {
       if (isLoginView) {
         // Login logic
         response = await axios.post<{ token: string }>(
-          "http://localhost:5000/api/auth/login",
+          `${baseUrl}/api/auth/login`,
           {
             email,
             password,
@@ -121,7 +122,7 @@ function Navbar() {
       } else {
         // Sign-up logic
         response = await axios.post<{ token: string }>(
-          "http://localhost:5000/api/auth/signup",
+          `${baseUrl}/api/auth/signup`,
           {
             email,
             password,
@@ -150,7 +151,7 @@ function Navbar() {
     const { credential, clientId } = credentialResponse;
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/google_auth",
+        `${baseUrl}/auth/google_auth`,
         {
           credential,
           client_id: clientId,

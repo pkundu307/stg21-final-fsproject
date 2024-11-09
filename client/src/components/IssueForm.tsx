@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
+import { baseUrl } from "../utils/baseUrl";
 
 const Issue = () => {
   const [issue, setIssue] = useState({
@@ -31,7 +32,7 @@ const Issue = () => {
     console.log(issueData); // Optional: for debugging
 
     try {
-      const response = await fetch("http://localhost:5000/api/v1/issues/add", {
+      const response = await fetch(`${baseUrl}/api/v1/issues/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

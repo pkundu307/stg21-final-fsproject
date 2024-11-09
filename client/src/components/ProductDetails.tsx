@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../redux/cartSlice";
+import { baseUrl } from "../utils/baseUrl";
 
 interface Dimensions {
   length: number;
@@ -48,7 +49,7 @@ const ProductDetail: React.FC = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/v1/products/${id}`
+          `${baseUrl}/api/v1/products/${id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch product");
@@ -92,7 +93,7 @@ const addProductToCart = (Product_id: string)=>{
   }
   console.log(dataToAdd,'<454>');
   
-fetch('http://localhost:5000/api/v1/cart/add',{
+fetch(`${baseUrl}/api/v1/cart/add`,{
   method: 'POST',
   headers: {
     "content-type": "application/json",
