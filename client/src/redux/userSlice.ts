@@ -1,6 +1,7 @@
 // userSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { baseUrl } from '../utils/baseUrl';
 
 const token = localStorage.getItem('token');
 
@@ -29,7 +30,7 @@ export const fetchUserDetails = createAsyncThunk(
 export const updateUserDetails = createAsyncThunk(
   'user/updateUserDetails',
   async (updatedUser: User) => {
-    const response = await axios.put('http://localhost:5000/api/auth/update', updatedUser, {
+    const response = await axios.put(`${baseUrl}/api/auth/update`, updatedUser, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

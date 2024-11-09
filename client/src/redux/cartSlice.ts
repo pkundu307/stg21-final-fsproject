@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { RootState } from './types'; // Assuming you have this set up
 
 interface CartItem {
-  _id: string;
   id: string;
   image: string;
   quantity: number;
   product: {
-    _id: string;
     id: string;
     title: string;
     price: number;
@@ -31,7 +29,7 @@ const initialState: CartState = {
 // Fetch cart items by user ID (from JWT)
 export const fetchCart = createAsyncThunk<CartItem[], void, { state: RootState }>(
   'cart/fetchCart',
-  async (_, {  rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get('http://localhost:5000/api/v1/cart/cart', {
@@ -39,17 +37,17 @@ export const fetchCart = createAsyncThunk<CartItem[], void, { state: RootState }
           Authorization: `Bearer ${token}`,
         },
       });
-console.log(response.data);
 
       return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
+      if (error instanceof AxiosError && error.response) {
         return rejectWithValue(error.response.data as string);
       }
-      return rejectWithValue('Error fetching addresses');
+      return rejectWithValue('Error fetching cart');
     }
   }
 );
+
 
 // Update cart item quantity by productId
 export const updateCart = createAsyncThunk<CartItem, { productId: string; quantity: number }, { state: RootState }>(
@@ -70,14 +68,15 @@ export const updateCart = createAsyncThunk<CartItem, { productId: string; quanti
       // Extract the updated cart item
       const updatedItem = response.data.updatedCart;
       return updatedItem;  // Return updated item
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
+    }  catch (error) {
+      if (error instanceof AxiosError && error.response) {
         return rejectWithValue(error.response.data as string);
       }
       return rejectWithValue('Error fetching addresses');
     }
   }
 );
+
 
 
 const cartSlice = createSlice({

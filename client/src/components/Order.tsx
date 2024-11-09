@@ -1,41 +1,53 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import {
   clearCart,
   fetchCart,
   selectCartItems,
-  selectCartStatus,
-} from "../redux/cartSlice";
+  } from "../redux/cartSlice";
 import { fetchAddresses } from "../redux/addressSlice";
 import { ToastContainer, toast } from "react-toastify"; // Import Toastify
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
 import axios from "axios";
+import { RootState,useAppDispatch } from "../redux/store";
+import { PanInfo } from "framer-motion";
+
+
+interface Address {
+  _id: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
+}
+
+
 
 const OrderPage: React.FC = () => {
   const [isOrder, setIsOrder] = useState(false);
   const sliderRef = useRef<HTMLDivElement | null>(null);
 
-  const handleDragEnd = (_event: unknown, info: any) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.point.x >= (sliderRef.current?.offsetWidth || 300) - 60) {
       handlePlaceOrder();
-     
     }
   };
-
+  
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch(); 
   const cart = useSelector(selectCartItems);
   const [selectedAddress, setSelectedAddress] = useState<string | undefined>(
     undefined
   );
 
-  const cartStatus = useSelector(selectCartStatus);
+  const cartStatus = useSelector((state: RootState) => state.cart.status);
 
   useEffect(() => {
     if (cartStatus === "idle") {
-      dispatch(fetchCart());
+      dispatch(fetchCart);
     }
   }, [dispatch, cartStatus]);
   const { addresses, status, error } = useSelector(
@@ -93,7 +105,7 @@ const OrderPage: React.FC = () => {
   
     // Map cart items to the required format
     const items = cart.map((item) => ({
-      productId: item.product._id,
+      productId: item.product.id,
       quantity: item.quantity,
     }));
   
@@ -107,47 +119,7 @@ const OrderPage: React.FC = () => {
     try {
       setIsOrder(true);
   
-      if (paymentMethod === "online") {
-        // Logic for online payment
-        toast.info("Redirecting to online payment...");
-        
-        // Assuming you integrate with an online payment provider (e.g., Stripe or Razorpay)
-        const paymentResponse = await initiateOnlinePayment(orderData);
-        
-  
-        if (paymentResponse.success) {
-          // Handle order placement after successful online payment
-          const response = await fetch("http://localhost:5000/api/v1/orders/new", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({...orderData,paymentStatus:"completed"}),
-          });
-  
-          if (response.ok) {
-            const data = await response.json();
-            toast.success("Online payment completed. Order placed successfully!", {
-              position: "top-center",
-            });
-  
-            // Clear the cart after placing the order
-            await axios.put('http://localhost:5000/api/v1/cart/delete', {}, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            dispatch(clearCart());
-            navigate("/order-success", { state: { ...data } });
-          } else {
-            throw new Error("Order placement failed after payment.");
-          }
-        } else {
-          toast.error("Online payment failed. Please try again.", {
-            position: "top-center",
-          });
-        }
-  
-      } else if (paymentMethod === "cash_on_delivery") {
+    if (paymentMethod === "cash_on_delivery") {
         // Existing logic for cash on delivery
         const response = await fetch("http://localhost:5000/api/v1/orders/new", {
           method: "POST",
@@ -183,73 +155,7 @@ const OrderPage: React.FC = () => {
   };
   
   // Dummy function to represent the online payment flow
-  const initiateOnlinePayment = async (orderData: unknown) => {
-    try {
-      // Fetch the key for Razorpay
-      const { data: { key } } = await axios.get('http://localhost:5000/api/orders/getkey', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-  
-      // Create the order on your backend
-      const { data: { order, user } } = await axios.post(
-        "http://localhost:5000/api/orders/onlinepay",
-        orderData, // Pass orderData as the body of the request
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        }
-      );
-  
-      // Create Razorpay options
-      const options = {
-        key,
-        amount: order.amount,
-        currency: "INR",
-        name: "lootlo",
-        description: "Razorpay tutorial",
-        image: "https://builtin.com/sites/www.builtin.com/files/styles/og/public/2022-09/ecommerce.png",
-        order_id: order.id,
-        callback_url: "http://localhost:5000/api/orders/paymentverification",
-        prefill: {
-          name: user.name,
-          email: user.email,
-        },
-        notes: {
-          "address": "Razorpay official"
-        },
-        theme: {
-          color: "#67eb34"
-        },
-      };
-  
-      return new Promise((resolve, reject) => {
-        // Initialize Razorpay instance
-        const razor = new window.Razorpay({
-          ...options,
-          handler: (response: any) => {
-            // Handle success callback when payment is completed
-            console.log("Payment successful:", response);
-            resolve({ success: true, order, paymentResponse: response });
-          },
-          modal: {
-            ondismiss: () => {
-              // Handle when user dismisses the payment modal
-              console.log("Payment dismissed by user");
-              setIsOrder(false);
-              window.location.reload();
-              reject({ success: false, message: "Payment dismissed by user" });
-            }
-          }
-        });
-  
-        // Open the Razorpay payment modal
-        razor.open();
-      });
-  
-    } catch (error) {
-      console.error("Error initiating online payment:", error);
-      return { success: false, error: error.message }; // Return failure in case of an error
-    }
-  };
+ 
   
   
 
@@ -376,7 +282,7 @@ const OrderPage: React.FC = () => {
               <option value="" disabled>
                 -- Select an Address --
               </option>
-              {addresses.map((address) => (
+              {addresses.map((address : Address) => (
                 <option
                   key={address._id}
                   value={address._id}
@@ -392,28 +298,28 @@ const OrderPage: React.FC = () => {
                 <h3 className="text-md font-semibold">Selected Address:</h3>
                 <p>
                   {
-                    addresses.find((addr) => addr._id === selectedAddress)
+                    addresses.find((addr:Address) => addr._id === selectedAddress)
                       ?.street
                   }
                 </p>
                 <p>
-                  {addresses.find((addr) => addr._id === selectedAddress)?.city}
+                  {addresses.find((addr:Address) => addr._id === selectedAddress)?.city}
                 </p>
                 <p>
                   {
-                    addresses.find((addr) => addr._id === selectedAddress)
+                    addresses.find((addr:Address) => addr._id === selectedAddress)
                       ?.state
                   }
                 </p>
                 <p>
                   {
-                    addresses.find((addr) => addr._id === selectedAddress)
+                    addresses.find((addr:Address) => addr._id === selectedAddress)
                       ?.postalCode
                   }
                 </p>
                 <p>
                   {
-                    addresses.find((addr) => addr._id === selectedAddress)
+                    addresses.find((addr:Address) => addr._id === selectedAddress)
                       ?.country
                   }
                 </p>
@@ -435,7 +341,7 @@ const OrderPage: React.FC = () => {
           <option value="" disabled selected>
             Select a payment method
           </option>
-          <option value="online">UPI/CREDIT CARD/DEBIT CARD/BANK TRANSFER</option>
+          {/* <option value="online">UPI/CREDIT CARD/DEBIT CARD/BANK TRANSFER</option> */}
           <option value="cash_on_delivery">Cash on Delivery</option>
         </select>
       </div>

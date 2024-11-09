@@ -6,7 +6,7 @@ export const addAddress = async (req, res) => {
   try {
     const { street, city, state, postalCode, country } = req.body;
     const { id } = req.user;
-    console.log(req.user);
+
     
     const newAddress = new Address({
       street,

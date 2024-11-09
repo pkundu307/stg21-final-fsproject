@@ -3,6 +3,7 @@ import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { baseUrl } from '../utils/baseUrl';
 
 
 const Footer: React.FC = () => {
@@ -11,7 +12,7 @@ const Footer: React.FC = () => {
     console.log(email);
     
 
-    fetch("http://localhost:5000/api/v1/newsletter/subscribe", {
+    fetch(`${baseUrl}/api/v1/newsletter/subscribe`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"},

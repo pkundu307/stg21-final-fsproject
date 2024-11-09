@@ -85,11 +85,13 @@ const ProductDetail: React.FC = () => {
   if (!product) {
     return <div>Product not found</div>;
   }
-const addProductToCart = (ProductToAdd: Product)=>{
+const addProductToCart = (Product_id: string)=>{
   const dataToAdd = {
     quantity:1,
-    product:ProductToAdd._id
+    product:Product_id
   }
+  console.log(dataToAdd,'<454>');
+  
 fetch('http://localhost:5000/api/v1/cart/add',{
   method: 'POST',
   headers: {
@@ -113,7 +115,7 @@ console.error('Failed to add product',error);
 })
 
 }
-console.log('--------------------------------',product.reviews);
+// console.log('--------------------------------',product.reviews);
 // pkprasanna307
 // MUmCE2UqVpQD0rAn
   return (
@@ -261,7 +263,7 @@ console.log('--------------------------------',product.reviews);
               <button
                 type="button"
                 className="min-w-[200px] px-4 py-2.5 border border-blue-600 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded"
-                onClick={() => {addProductToCart(product)}}
+                onClick={() => {addProductToCart(product.id)}}
               >
            
                 Add to cart
