@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 import { RootState } from './types'; // Assuming you have this set up
+import { baseUrl } from '../utils/baseUrl';
 
 interface CartItem {
   id: string;
@@ -32,7 +33,7 @@ export const fetchCart = createAsyncThunk<CartItem[], void, { state: RootState }
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/v1/cart/cart', {
+      const response = await axios.get(`${baseUrl}/api/v1/cart/cart`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -56,7 +57,7 @@ export const updateCart = createAsyncThunk<CartItem, { productId: string; quanti
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:5000/api/v1/cart/${productId}`,
+        `${baseUrl}/api/v1/cart/${productId}`,
         { quantity },
         {
           headers: {

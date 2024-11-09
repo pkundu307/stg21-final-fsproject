@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import { baseUrl } from "../utils/baseUrl";
 
 interface Order {
   id: string;
@@ -29,7 +30,7 @@ function MyOrders() {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/v1/orders/orders/user",
+          `${baseUrl}/api/v1/orders/orders/user`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -54,7 +55,7 @@ function MyOrders() {
   console.log(cancelReason);
   const handelCancelOrder = async () => {
     try {
-        const res = await axios.put(`http://localhost:5000/api/v1/orders/cancel/${selectedOrderId}`,{
+        const res = await axios.put(`${baseUrl}/api/v1/orders/cancel/${selectedOrderId}`,{
             cancellationReason:cancelReason
         },{
             headers: {

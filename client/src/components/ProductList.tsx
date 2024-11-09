@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Product } from "../utils/types";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../utils/baseUrl";
 
 function ProductList(props:{heading:string}) {
   const [products, setProducts] = React.useState<Product[]>([]);
@@ -9,7 +10,7 @@ function ProductList(props:{heading:string}) {
     const fetchedProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/v1/products/getAll"
+          `${baseUrl}/api/v1/products/getAll`
         );
 
         if (!response.ok) {

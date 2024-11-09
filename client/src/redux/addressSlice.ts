@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios ,{AxiosError }from 'axios';
+import { baseUrl } from '../utils/baseUrl';
 
 // Get JWT token from localStorage
 const token = localStorage.getItem('token');
@@ -30,7 +31,7 @@ export const fetchAddresses = createAsyncThunk<Address[], void, { rejectValue: s
   'address/fetchAddresses',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('http://localhost:5000/api/v1/address/all', {
+      const response = await axios.get(`${baseUrl}/api/v1/address/all`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,7 +52,7 @@ export const updateAddress = createAsyncThunk<Address, { addressId: string; upda
   'address/updateAddress',
   async ({ addressId, updatedAddress }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/v1/address/${addressId}`, updatedAddress, {
+      const response = await axios.put(`${baseUrl}/api/v1/address/${addressId}`, updatedAddress, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -71,7 +72,7 @@ export const deleteAddress = createAsyncThunk<string, string, { rejectValue: str
   'address/deleteAddress',
   async (addressId, { rejectWithValue }) => {
     try {
-      await axios.delete(`http://localhost:5000/api/v1/address/${addressId}`, {
+      await axios.delete(`${baseUrl}/api/v1/address/${addressId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -91,7 +92,7 @@ export const addAddress = createAsyncThunk<Address, Address, { rejectValue: stri
   'address/addAddress',
   async (newAddress, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/address/add', newAddress, {
+      const response = await axios.post('${base}/api/v1/address/add', newAddress, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

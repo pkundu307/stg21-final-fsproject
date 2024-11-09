@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import { AxiosError } from 'axios';
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 import ProductList from './ProductList';
+import { baseUrl } from '../utils/baseUrl';
 
 // Define the structure of your form data
 interface ProductFormData {
@@ -32,7 +33,7 @@ const AddProduct = () => {
 
     const onSubmit = async (data: ProductFormData) => {
         try {
-            const response = await fetch('http://localhost:5000/api/product/add', {
+            const response = await fetch(`${baseUrl}/api/product/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
